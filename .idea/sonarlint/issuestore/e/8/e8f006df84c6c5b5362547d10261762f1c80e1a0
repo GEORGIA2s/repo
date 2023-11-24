@@ -1,0 +1,20 @@
+
+g	java:S1129"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8ÖÂ±À1
+u	java:S135&"YReduce the total number of break and continue statements in this loop to use at most one.(„ö¤®8×Â±À1
+7
+java:S1220""Move this file to a named package.8×Â±À1
+d
+java:S3973T"GUse indentation to denote the code conditionally executed by this "if".(°ƒ•î8Ë•´À1
+k
+java:S3973V"IUse indentation to denote the code conditionally executed by this "else".(„¶áìøÿÿÿÿ8°º¶À1
+F	java:S106%"+Replace this use of System.out by a logger.(Æ½û'8èÂ±À1
+{
+java:S21428"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8èÂ±À1
+G	java:S106I"+Replace this use of System.out by a logger.(¸Ò±õ8èÂ±À1
+L	java:S106O"+Replace this use of System.out by a logger.(û¼Ãÿÿÿÿÿ8èÂ±À1
+L	java:S106P"+Replace this use of System.out by a logger.(á˜êŠıÿÿÿÿ8èÂ±À1
+L	java:S106Q"+Replace this use of System.out by a logger.(û¼Ãÿÿÿÿÿ8èÂ±À1
+G	java:S106U"+Replace this use of System.out by a logger.(äõÍÿ8Åº¶À1
+G	java:S106W"+Replace this use of System.out by a logger.(Èœ—Á8ªÊ¾À1
+w
+java:S1210‡"YOverride "equals(Object obj)" to comply with the contract of the "compareTo(T o)" method.(Ûªü¶8Åº¶À1
