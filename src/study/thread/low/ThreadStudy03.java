@@ -1,4 +1,4 @@
-package study.thread.first;
+package study.thread.low;
 
 import java.util.LinkedList;
 import java.util.Queue;

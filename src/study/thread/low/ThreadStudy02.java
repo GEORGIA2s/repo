@@ -1,4 +1,4 @@
-package study.thread.first;
+package study.thread.low;
 
 class SharedResource02{
     private boolean flag = false;

@@ -1,4 +1,4 @@
-package study.thread.first;
+package study.thread.low;
 
 class SharedResource01 {
     private int count = 0;
