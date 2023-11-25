@@ -1,3 +1,5 @@
+package study.thread.first;
+
 import java.util.LinkedList;
 import java.util.Queue;
 

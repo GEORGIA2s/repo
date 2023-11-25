@@ -1,3 +1,5 @@
+package study.utils;
+
 public class Print {
     public static final String RESET = "\u001B[0m";
     public static final String FONT_BLACK = "\u001B[30m";
@@ -18,11 +20,11 @@ public class Print {
     public static final String BACKGROUND_WHITE = "\u001B[47m";
     public static final String UNDER_LINE = "\u001B[4m";
 
-    public void var() {
+    public static void var() {
         System.out.println("=================================================================");
     }
 
-    public void var2() {
+    public static void var2() {
         System.out.println("----------------------------------------------------------------------");
     }
 }
