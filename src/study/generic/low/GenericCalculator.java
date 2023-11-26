@@ -11,7 +11,7 @@ class Calculator<T extends Number> implements Calculable<T> {
 
     @Override
     public T add(T value, T operand) {
-        if(value instanceof Integer){
+        if(value instanceof Integer && operand instanceof Integer){
             return (T) Integer.valueOf(value.intValue() + operand.intValue());
         }else if(value instanceof Double){
             return (T) Double.valueOf(value.doubleValue() + operand.doubleValue());
@@ -21,7 +21,7 @@ class Calculator<T extends Number> implements Calculable<T> {
 
     @Override
     public T subtract(T value, T operand) {
-        if(value instanceof Integer){
+        if(value instanceof Integer && operand instanceof Integer){
             return (T) Integer.valueOf(value.intValue() - operand.intValue());
         }else if(value instanceof Double){
             return (T) Double.valueOf(value.doubleValue() - operand.doubleValue());
@@ -31,7 +31,7 @@ class Calculator<T extends Number> implements Calculable<T> {
 
     @Override
     public T multiply(T value, T operand) {
-        if(value instanceof Integer){
+        if(value instanceof Integer && operand instanceof Integer){
             return (T) Integer.valueOf(value.intValue() * operand.intValue());
         }else if(value instanceof Double){
             return (T) Double.valueOf(value.doubleValue() * operand.doubleValue());
@@ -41,7 +41,7 @@ class Calculator<T extends Number> implements Calculable<T> {
 
     @Override
     public T divide(T value, T operand) {
-        if(value instanceof Integer){
+        if(value instanceof Integer && operand instanceof Integer){
             return (T) Integer.valueOf(value.intValue() / operand.intValue());
         }else if(value instanceof Double){
             return (T) Double.valueOf(value.doubleValue() / operand.doubleValue());
