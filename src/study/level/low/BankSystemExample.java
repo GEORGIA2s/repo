@@ -35,7 +35,7 @@ class BankAccount<T extends Enum<T>> {
     public void deposit(double amount) {
         if (amount > 0) {
             balance += amount;
-            System.out.println("Deposited $" + amount + " into account " + accountNumber);
+            System.out.println("입금내역 ₩" + amount + " 계좌로=> " + accountNumber);
         } else {
             System.out.println("Invalid deposit amount");
         }
@@ -44,16 +44,16 @@ class BankAccount<T extends Enum<T>> {
     public void withdraw(double amount) {
         if (amount > 0 && balance >= amount) {
             balance -= amount;
-            System.out.println("Withdrawn $" + amount + " from account " + accountNumber);
+            System.out.println("출금내역 $" + amount + " 계좌에서=> " + accountNumber);
         } else {
             System.out.println("Invalid withdrawal amount or insufficient funds");
         }
     }
 
     public void printAccountInfo() {
-        System.out.println("Account Number: " + accountNumber);
-        System.out.println("Account Type: " + type);
-        System.out.println("Balance: $" + balance);
+        System.out.println("계좌 번호: " + accountNumber);
+        System.out.println("계좌 타입: " + type);
+        System.out.println("잔액: ₩" + balance);
     }
 }
 
@@ -67,15 +67,15 @@ class Bank<T extends Enum<T>> {
     public void openAccount(String accountNumber, double initialBalance, T type) {
         BankAccount<?> account = new BankAccount<>(accountNumber, initialBalance, type);
         accounts.put(accountNumber, account);
-        System.out.println("Account opened successfully!");
+        System.out.println("계좌 개설 성공!");
     }
 
     public void closeAccount(String accountNumber) {
         if (accounts.containsKey(accountNumber)) {
             accounts.remove(accountNumber);
-            System.out.println("Account " + accountNumber + " closed successfully!");
+            System.out.println("계좌 " + accountNumber + " 폐쇄 성공!");
         } else {
-            System.out.println("Account not found");
+            System.out.println("계좌를 찾을 수 없습니다.");
         }
     }
 
@@ -84,7 +84,7 @@ class Bank<T extends Enum<T>> {
     }
 
     public void printAllAccounts() {
-        System.out.println("All Accounts:");
+        System.out.println("모든 계좌 목록:");
 
         for (Map.Entry<String, BankAccount<?>> entry : accounts.entrySet()) {
             String accountNumber = entry.getKey();
