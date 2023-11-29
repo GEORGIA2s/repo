@@ -1,0 +1,201 @@
+package study.level.high;
+
+import java.util.*;
+
+enum ApprovalStatus {
+	PENDING, APPROVED, REJECTED
+}
+
+interface Approvable {
+	String getTitle();
+
+	double getAmount();
+}
+
+class ApprovalRequest implements Approvable {
+	private String title;
+	private double amount;
+
+	public ApprovalRequest(String title, double amount) {
+		this.title = title;
+		this.amount = amount;
+	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
+
+	@Override
+	public double getAmount() {
+		return amount;
+	}
+}
+
+class ApprovalItem {
+	private Approvable approvable;
+	private ApprovalStatus status;
+	private String approver;
+	private List<String> approverList; // 추가: 결재자 목록
+
+	public ApprovalItem(Approvable approvable, ApprovalStatus status, String approver) {
+		this.approvable = approvable;
+		this.status = status;
+		this.approver = approver;
+		this.approverList = new ArrayList<>();
+	}
+
+	public Approvable getApprovable() {
+		return approvable;
+	}
+
+	public void setStatus(ApprovalStatus status) {
+		this.status = status;
+	}
+
+	public ApprovalStatus getStatus() {
+		return status;
+	}
+
+	public String getApprover() {
+		return approver;
+	}
+
+	public List<String> getApproverList() {
+		return new ArrayList<>(approverList);
+	}
+
+	public void addApprover(String approver) {
+		approverList.add(approver);
+	}
+}
+
+class ApprovalService {
+	private List<ApprovalItem> approvalItems;
+
+	public ApprovalService() {
+		this.approvalItems = new ArrayList<>();
+	}
+
+	public void submitApprovalRequest(Approvable approvable) {
+		ApprovalItem approvalItem = new ApprovalItem(approvable, ApprovalStatus.PENDING, null);
+		approvalItems.add(approvalItem);
+	}
+
+	public void processApproval(int index, ApprovalStatus status, String approver) {
+		if (index >= 0 && index < approvalItems.size()) {
+			ApprovalItem approvalItem = approvalItems.get(index);
+			if (approvalItem.getStatus() == ApprovalStatus.PENDING) {
+				approvalItem = new ApprovalItem(approvalItem.getApprovable(), status, approver);
+				approvalItem.addApprover(approver); // 결재자 목록에 추가
+				approvalItems.set(index, approvalItem);
+				System.out.println("결재가 처리되었습니다.");
+			} else {
+				System.out.println("이미 처리된 결재입니다.");
+			}
+		} else {
+			System.out.println("유효하지 않은 결재 요청입니다.");
+		}
+	}
+
+	public void approveAll() {
+		for (ApprovalItem item : approvalItems) {
+			if (item.getStatus() == ApprovalStatus.PENDING) {
+				item.setStatus(ApprovalStatus.APPROVED);
+				System.out.println("자동으로 모든 항목이 승인되었습니다.");
+			}
+		}
+	}
+
+	public void rejectAll() {
+		for (ApprovalItem item : approvalItems) {
+			if (item.getStatus() == ApprovalStatus.PENDING) {
+				item.setStatus(ApprovalStatus.REJECTED);
+				System.out.println("자동으로 모든 항목이 반려되었습니다.");
+			}
+		}
+	}
+
+	public List<ApprovalItem> getApprovalItems() {
+		return new ArrayList<>(approvalItems);
+	}
+
+	public List<ApprovalItem> getItemsAboveAmount(double amount) {
+		List<ApprovalItem> filteredItems = new ArrayList<>();
+		for (ApprovalItem item : approvalItems) {
+			if (item.getApprovable().getAmount() >= amount) {
+				filteredItems.add(item);
+			}
+		}
+		return filteredItems;
+	}
+
+	public Map<ApprovalStatus, Integer> getStatusCounts() {
+		Map<ApprovalStatus, Integer> statusCounts = new HashMap<>();
+		for (ApprovalItem item : approvalItems) {
+			ApprovalStatus status = item.getStatus();
+			statusCounts.put(status, statusCounts.getOrDefault(status, 0) + 1);
+		}
+		return statusCounts;
+	}
+}
+
+public class ApprovalExample {
+	public static void main(String[] args) {
+		ApprovalService approvalService = new ApprovalService();
+		Scanner scanner = new Scanner(System.in);
+
+		approvalService.submitApprovalRequest(new ApprovalRequest("휴가 신청", 1000.0));
+		approvalService.submitApprovalRequest(new ApprovalRequest("업무 지출", 500.0));
+
+		List<ApprovalItem> approvalItems = approvalService.getApprovalItems();
+		for (int i = 0; i < approvalItems.size(); i++) {
+			ApprovalItem item = approvalItems.get(i);
+			System.out.println(
+					i + ": " + item.getApprovable().getTitle() + " - " + item.getApprovable().getAmount() + "원");
+		}
+
+		System.out.print("처리할 결재 항목 선택 (번호 입력): ");
+		int selectedIndex = scanner.nextInt();
+
+		System.out.print("결재 처리 결과 (APPROVED, REJECTED): ");
+		String statusInput = scanner.next();
+		ApprovalStatus status = ApprovalStatus.valueOf(statusInput);
+
+		System.out.print("결재자 이름 입력: ");
+		String approver = scanner.next();
+
+		approvalService.processApproval(selectedIndex, status, approver);
+
+		// 결재자 목록 출력
+		ApprovalItem processedItem = approvalItems.get(selectedIndex);
+		List<String> approverList = processedItem.getApproverList();
+		System.out.println("결재자 목록: " + approverList);
+
+		approvalService.approveAll();
+		approvalService.rejectAll();
+
+		List<ApprovalItem> updatedApprovalItems = approvalService.getApprovalItems();
+		System.out.println("업데이트된 결재 목록:");
+		for (ApprovalItem item : updatedApprovalItems) {
+			System.out.println("제목: " + item.getApprovable().getTitle() + ", 금액: " + item.getApprovable().getAmount()
+					+ ", 상태: " + item.getStatus() + ", 결재자: " + item.getApprover());
+		}
+
+		System.out.print("금액 이상인 결재 항목 검색 (금액 입력): ");
+		double amountInput = scanner.nextDouble();
+		List<ApprovalItem> itemsAboveAmount = approvalService.getItemsAboveAmount(amountInput);
+		System.out.println("금액 " + amountInput + "원 이상인 항목:");
+		for (ApprovalItem item : itemsAboveAmount) {
+			System.out.println("제목: " + item.getApprovable().getTitle() + ", 금액: " + item.getApprovable().getAmount()
+					+ ", 상태: " + item.getStatus() + ", 결재자: " + item.getApprover());
+		}
+
+		// 결재 상태별 개수 출력
+		Map<ApprovalStatus, Integer> statusCounts = approvalService.getStatusCounts();
+		System.out.println("결재 상태별 개수:");
+		for (Map.Entry<ApprovalStatus, Integer> entry : statusCounts.entrySet()) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+	}
+}
