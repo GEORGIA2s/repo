@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 enum ProductType {
-    ELECTRONICS,
-    CLOTHING,
-    BOOKS
+    전자제품,
+    의류,
+    도서
 }
 
 class Product<T> {
@@ -57,12 +57,12 @@ class Order_2<T extends Product<?>> {
 
     public double getDiscount(ProductType type) {
         switch (type) {
-            case ELECTRONICS:
-                return 0.1; // 10% discount for electronics
-            case CLOTHING:
-                return 0.05; // 5% discount for clothing
-            case BOOKS:
-                return 0.2; // 20% discount for books
+            case 전자제품:
+                return 0.1; // 전자제품은 10% 할인
+            case 의류:
+                return 0.05; // 의류는 5% 할인
+            case 도서:
+                return 0.2; // 도서는 20% 할인
             default:
                 return 0;
         }
@@ -71,9 +71,9 @@ class Order_2<T extends Product<?>> {
 
 public class OrderSaleExample {
     public static void main(String[] args) {
-        Product<ProductType> laptop = new Product<>("Laptop", 1000, ProductType.ELECTRONICS);
-        Product<ProductType> shirt = new Product<>("Shirt", 50, ProductType.CLOTHING);
-        Product<ProductType> novel = new Product<>("Novel", 20, ProductType.BOOKS);
+        Product<ProductType> laptop = new Product<>("노트북", 1000000, ProductType.전자제품);
+        Product<ProductType> shirt = new Product<>("셔츠", 50000, ProductType.의류);
+        Product<ProductType> novel = new Product<>("소설", 20000, ProductType.도서);
 
         Order_2<Product<ProductType>> order = new Order_2<>();
         order.addItem(laptop);
@@ -81,6 +81,5 @@ public class OrderSaleExample {
         order.addItem(novel);
 
         double totalPrice = order.calculateTotalPrice();
-        System.out.println("Total Price after discount: $" + totalPrice);
+        System.out.println("할인 후 총 가격: ₩" + totalPrice);
     }
-}
