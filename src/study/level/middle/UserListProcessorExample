@@ -1,0 +1,97 @@
+package study.level.middle;
+import java.util.*;
+
+//예제를 위한 Enum 정의
+enum UserRole {
+ ADMIN, USER, GUEST
+}
+
+//Generic을 사용한 데이터 클래스 정의
+class User_2<K, V> {
+ private K key;
+ private V value;
+
+ public User_2(K key, V value) {
+     this.key = key;
+     this.value = value;
+ }
+
+ public K getKey() {
+     return key;
+ }
+
+ public V getValue() {
+     return value;
+ }
+
+ @Override
+ public String toString() {
+     return "User{" +
+             "key=" + key +
+             ", value=" + value +
+             '}';
+ }
+}
+
+//Interface 정의
+interface UserProcessor<T, U> {
+ List<T> processUsers(List<U> userList);
+}
+
+//Interface 구현 및 컬렉션 활용
+class UserListProcessor implements UserProcessor<User_2<String, UserRole>, Map<String, UserRole>> {
+ @Override
+ public List<User_2<String, UserRole>> processUsers(List<Map<String, UserRole>> userList) {
+     List<User_2<String, UserRole>> processedUsers = new ArrayList<>();
+
+     for (Map<String, UserRole> userMap : userList) {
+         // 흔히 쓰이지 않는 메서드 활용 예제: replaceAll
+         userMap.replaceAll((key, value) -> value == UserRole.ADMIN ? UserRole.USER : value);
+
+         // Enum의 values() 메서드 사용
+         UserRole[] roles = UserRole.values();
+         Random random = new Random();
+         UserRole randomRole = roles[random.nextInt(roles.length)];
+
+         // Map을 정렬된 List로 변환
+         List<Map.Entry<String, UserRole>> sortedEntries = new ArrayList<>(userMap.entrySet());
+         Collections.sort(sortedEntries, Comparator.comparing(Map.Entry::getKey));
+
+         // List를 활용한 데이터 클래스 생성
+         for (Map.Entry<String, UserRole> entry : sortedEntries) {
+             processedUsers.add(new User_2<>(entry.getKey(), entry.getValue()));
+         }
+         // 중복 제거를 위한 Set 활용
+         Set<User_2<String, UserRole>> userSet = new HashSet<>(processedUsers);
+         processedUsers = new ArrayList<>(userSet);
+     }
+
+     return processedUsers;
+ }
+}
+
+public class UserListProcessorExample {
+ public static void main(String[] args) {
+     // 예제 데이터 생성
+     List<Map<String, UserRole>> userList = new ArrayList<>();
+     Map<String, UserRole> user1 = new HashMap<>();
+     user1.put("user1", UserRole.ADMIN);
+     user1.put("user2", UserRole.USER);
+     user1.put("user3", UserRole.GUEST);
+
+     Map<String, UserRole> user2 = new HashMap<>();
+     user2.put("user4", UserRole.ADMIN);
+     user2.put("user5", UserRole.USER);
+     user2.put("user6", UserRole.GUEST);
+
+     userList.add(user1);
+     userList.add(user2);
+
+     // Interface를 활용한 데이터 처리
+     UserProcessor<User_2<String, UserRole>, Map<String, UserRole>> processor = new UserListProcessor();
+     List<User_2<String, UserRole>> processedUsers = processor.processUsers(userList);
+
+     // 결과 출력
+     processedUsers.forEach(System.out::println);
+ }
+}
