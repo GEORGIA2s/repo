@@ -49,22 +49,22 @@ class DrinkMenu<T extends Enum<T>> {
     }
 
     public void printMenu() {
-        System.out.println("Drink Menu:");
+        System.out.println("음료 메뉴:");
 
         for (Map.Entry<DrinkType, Drink<?>> entry : menu.entrySet()) {
             DrinkType type = entry.getKey();
             Drink<?> drink = entry.getValue();
 
-            System.out.println("  - Type: " + type + " | Drink: " + drink.getName() + " | Price: $" + drink.getPrice());
+            System.out.println("  - 타입: " + type + " | 음료: " + drink.getName() + " | 가격: ₩" + (int)drink.getPrice());
         }
     }
 }
 
 public class DrinkOrderExample {
     public static void main(String[] args) {
-        Drink<DrinkType> americano = new Drink<>("Americano", 2.5, DrinkType.COFFEE);
-        Drink<DrinkType> greenTea = new Drink<>("Green Tea", 3.0, DrinkType.TEA);
-        Drink<DrinkType> cola = new Drink<>("Cola", 1.8, DrinkType.SODA);
+        Drink<DrinkType> americano = new Drink<>("아메리카노", 2500, DrinkType.COFFEE);
+        Drink<DrinkType> greenTea = new Drink<>("녹차", 3000, DrinkType.TEA);
+        Drink<DrinkType> cola = new Drink<>("콜라", 1800, DrinkType.SODA);
 
         DrinkMenu<DrinkType> cafeMenu = new DrinkMenu<>();
         cafeMenu.addDrink(americano);
@@ -76,7 +76,7 @@ public class DrinkOrderExample {
         DrinkType selectedDrinkType = DrinkType.COFFEE;
         double totalPrice = cafeMenu.getPrice(selectedDrinkType);
 
-        System.out.println("Selected Drink: " + selectedDrinkType);
-        System.out.println("Total Price: $" + totalPrice);
+        System.out.println("선택된 음료: " + selectedDrinkType);
+        System.out.println("총 금액: ₩" + (int)totalPrice);
     }
 }
