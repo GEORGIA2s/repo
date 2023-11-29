@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 enum Genre {
-    FICTION,
-    NON_FICTION,
-    MYSTERY,
-    SCIENCE_FICTION
+    FICTION, // 창작 소설
+    NON_FICTION, // 실화 소설
+    MYSTERY, // 미스터리
+    SCIENCE_FICTION // 공상 과학 소설
 }
 
 class Book<T extends Enum<T>> {
@@ -45,23 +45,23 @@ class Library<T extends Enum<T>> {
     }
 
     public void printBooks(Genre genre) {
-        System.out.println("Books in " + genre + " genre:");
+        System.out.println(genre + " 장르:");
 
         for (Book<?> book : bookCatalog.get(genre)) {
-            System.out.println("  - Title: " + book.getTitle());
+            System.out.println("  - 제목: " + book.getTitle());
         }
     }
 
     public void printAllBooks() {
-        System.out.println("All Books:");
+        System.out.println("모든 책:");
 
         for (Map.Entry<Genre, List<Book<?>>> entry : bookCatalog.entrySet()) {
             Genre genre = entry.getKey();
             List<Book<?>> books = entry.getValue();
 
-            System.out.println("Genre: " + genre);
+            System.out.println("장르: " + genre);
             for (Book<?> book : books) {
-                System.out.println("  - Title: " + book.getTitle());
+                System.out.println("  - 제목: " + book.getTitle());
             }
         }
     }
@@ -69,9 +69,9 @@ class Library<T extends Enum<T>> {
 
 public class LibraryExample {
     public static void main(String[] args) {
-        Book<Genre> fictionBook = new Book<>("To Kill a Mockingbird", Genre.FICTION);
-        Book<Genre> nonFictionBook = new Book<>("Sapiens", Genre.NON_FICTION);
-        Book<Genre> mysteryBook = new Book<>("The Girl with the Dragon Tattoo", Genre.MYSTERY);
+        Book<Genre> fictionBook = new Book<>("톰 소여의 모험", Genre.FICTION);
+        Book<Genre> nonFictionBook = new Book<>("사피엔스", Genre.NON_FICTION);
+        Book<Genre> mysteryBook = new Book<>("그리고 아무도 없었다", Genre.MYSTERY);
 
         Library<Genre> myLibrary = new Library<>();
         myLibrary.addBook(fictionBook);
@@ -81,4 +81,3 @@ public class LibraryExample {
         myLibrary.printBooks(Genre.FICTION);
         myLibrary.printAllBooks();
     }
-}
