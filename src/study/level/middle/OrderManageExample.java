@@ -8,7 +8,7 @@ import java.util.List;
 
 // 이넘(Enum) 정의
 enum OrderStatus {
-    PENDING, PROCESSING, COMPLETED, CANCELED
+    대기중, 처리중, 완료, 취소
 }
 
 // 제네릭 클래스 정의
@@ -19,7 +19,7 @@ class Order<T extends Number> {
 
     public Order(String orderId) {
         this.orderId = orderId;
-        this.status = OrderStatus.PENDING;
+        this.status = OrderStatus.대기중;
         this.items = new ArrayList<>();
     }
 
@@ -40,13 +40,13 @@ class Order<T extends Number> {
     }
 
     // 제네릭 메서드와 어노테이션을 혼합한 메서드
-    @UpdateStatus(OrderStatus.PROCESSING)
+    @UpdateStatus(OrderStatus.처리중)
     public void processOrder() {
-        if (status == OrderStatus.PENDING) {
-            status = OrderStatus.PROCESSING;
-            System.out.println("Order " + orderId + " is now being processed.");
+        if (status == OrderStatus.대기중) {
+            status = OrderStatus.처리중;
+            System.out.println(orderId + " 주문이 처리 중입니다.");
         } else {
-            System.out.println("Cannot process order with status: " + status);
+        	System.out.println("현재 주문 상태에서 주문 처리가 불가능합니다: " + status);
         }
     }
 }
@@ -69,8 +69,8 @@ public class OrderManageExample {
         order1.processOrder();
 
         // 주문 상태 출력
-        System.out.println("Order ID: " + order1.getOrderId());
-        System.out.println("Order Status: " + order1.getStatus());
-        System.out.println("Order Items: " + order1.getItems());
+        System.out.println("주문번호: " + order1.getOrderId());
+        System.out.println("주문 상태: " + order1.getStatus());
+        System.out.println("주문 상품: " + order1.getItems());
     }
 }
