@@ -3,9 +3,9 @@ package study.level.middle;
 import java.util.*;
 
 enum PostType {
-    TEXT,
-    IMAGE,
-    LINK
+    본문,
+    이미지,
+    링크
 }
 
 class Post<T extends Enum<T>> {
@@ -69,16 +69,16 @@ class Blog<T extends Enum<T>> {
     }
 
     public void printBlog() {
-        System.out.println("Blog Posts:");
+        System.out.println("블로그 포스팅:");
 
         for (Map.Entry<User, List<Post<?>>> entry : userPosts.entrySet()) {
             User user = entry.getKey();
             List<Post<?>> posts = entry.getValue();
 
-            System.out.println("User: " + user.getUsername());
+            System.out.println("사용자: " + user.getUsername());
 
             for (Post<?> post : posts) {
-                System.out.println("  - Type: " + post.getType() + " | Content: " + post.getContent());
+                System.out.println("  - 타입: " + post.getType() + " | 내용: " + post.getContent());
             }
         }
     }
@@ -86,29 +86,29 @@ class Blog<T extends Enum<T>> {
 
 public class BlogPostingExample {
     public static void main(String[] args) {
-        User alice = new User("Alice");
-        User bob = new User("Bob");
+        User ShimCheong = new User("심청이");
+        User Hong = new User("홍길동");
 
-        Post<PostType> textPost = new Post<>("Hello, World!", PostType.TEXT);
-        Post<PostType> imagePost = new Post<>("Image: Sunset", PostType.IMAGE);
-        Post<PostType> linkPost = new Post<>("Check this out: www.example.com", PostType.LINK);
+        Post<PostType> textPost = new Post<>("안녕하세요", PostType.본문);
+        Post<PostType> imagePost = new Post<>("이미지: 석양.jpg", PostType.이미지);
+        Post<PostType> linkPost = new Post<>("여기 링크 들어가보셈 ㅋㅋ : www.example.com", PostType.링크);
 
-        alice.addPost(textPost);
-        alice.addPost(imagePost);
-        bob.addPost(linkPost);
+        ShimCheong.addPost(textPost);
+        ShimCheong.addPost(imagePost);
+        Hong.addPost(linkPost);
 
         Blog<PostType> myBlog = new Blog<>();
-        myBlog.addUser(alice);
-        myBlog.addUser(bob);
+        myBlog.addUser(ShimCheong);
+        myBlog.addUser(Hong);
 
-        myBlog.addPost(alice, textPost);
-        myBlog.addPost(alice, imagePost);
-        myBlog.addPost(bob, linkPost);
+        myBlog.addPost(ShimCheong, textPost);
+        myBlog.addPost(ShimCheong, imagePost);
+        myBlog.addPost(Hong, linkPost);
 
         myBlog.printBlog();
 
         // Example of using Optional and stream
-        myBlog.getLatestPost(alice).ifPresent(post ->
-                System.out.println("Latest Post by " + alice.getUsername() + ": " + post.getContent()));
+        myBlog.getLatestPost(ShimCheong).ifPresent(post ->
+                System.out.println("[최신 게시물] " + ShimCheong.getUsername() + ": " + post.getContent()));
     }
 }
