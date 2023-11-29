@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 enum AccountType {
-    SAVINGS,
-    CHECKING,
-    LOAN
+    SAVINGS, // 저축 계좌
+    CHECKING,//체크 계좌
+    LOAN // 대출 계좌
 }
 
 class BankAccount<T extends Enum<T>> {
@@ -37,16 +37,16 @@ class BankAccount<T extends Enum<T>> {
             balance += amount;
             System.out.println("입금내역 ₩" + amount + " 계좌로=> " + accountNumber);
         } else {
-            System.out.println("Invalid deposit amount");
+            System.out.println("입금 금액이 잘못되었습니다.");
         }
     }
 
     public void withdraw(double amount) {
         if (amount > 0 && balance >= amount) {
             balance -= amount;
-            System.out.println("출금내역 $" + amount + " 계좌에서=> " + accountNumber);
+            System.out.println("출금내역 ₩" + amount + " 계좌에서=> " + accountNumber);
         } else {
-            System.out.println("Invalid withdrawal amount or insufficient funds");
+            System.out.println("잘못된 출금 금액 또는 부족한 잔액입니다");
         }
     }
 
@@ -90,7 +90,7 @@ class Bank<T extends Enum<T>> {
             String accountNumber = entry.getKey();
             BankAccount<?> account = entry.getValue();
 
-            System.out.println("Account Number: " + accountNumber + " | Type: " + account.getType() + " | Balance: $" + account.getBalance());
+            System.out.println("계좌 번호: " + accountNumber + " | 타입: " + account.getType() + " | 잔액: ₩" + (int)account.getBalance());
         }
     }
 }
@@ -119,4 +119,3 @@ public class BankSystemExample {
         myBank.printAllAccounts();
     }
 }
-
