@@ -42,9 +42,9 @@ public class PersonExample {
         Person<String> person1 = new Person<>("홍길동", "도사");
         Person<Integer> person2 = new Person<>("심청이", 25);
 
-        System.out.println("Gender: " + gender);
-        System.out.println("Person 1: " + person1.getName() + ", Attribute: " + person1.getAttribute());
-        System.out.println("Person 2: " + person2.getName() + ", Attribute: " + person2.getAttribute());
+        System.out.println("성별: " + gender);
+        System.out.println("사람 1: " + person1.getName() + ", 속성: " + person1.getAttribute());
+        System.out.println("사람 2: " + person2.getName() + ", 속성: " + person2.getAttribute());
 
         CustomAnnotation customAnnotation = PersonExample.class.getDeclaredField("annotatedField")
                 .getAnnotation(CustomAnnotation.class);
