@@ -1,0 +1,292 @@
+package study.level.high;
+
+import java.util.*;
+
+enum PostStatus {
+    DRAFT, PUBLISHED, ARCHIVED
+}
+
+class User {
+    private String username;
+
+    public User(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+}
+
+interface Post {
+    String getTitle();
+    String getContent();
+    User getAuthor();
+    PostStatus getStatus();
+    int getLikes();
+    void addLike(User user);
+}
+
+class BlogPost implements Post {
+    private String title;
+    private String content;
+    private User author;
+    private PostStatus status;
+    private int likes;
+    private Set<User> likedBy;
+
+    public BlogPost(String title, String content, User author) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.status = PostStatus.DRAFT;
+        this.likes = 0;
+        this.likedBy = new HashSet<>();
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getContent() {
+        return content;
+    }
+
+    @Override
+    public User getAuthor() {
+        return author;
+    }
+
+    @Override
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    @Override
+    public int getLikes() {
+        return likes;
+    }
+
+    @Override
+    public void addLike(User user) {
+        if (likedBy.add(user)) {
+            likes++;
+        }
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
+}
+
+interface Comment {
+    String getContent();
+    User getAuthor();
+    int getLikes();
+    void addLike(User user);
+    void editContent(String newContent);
+    void delete();
+}
+
+class BlogComment implements Comment {
+    private String content;
+    private User author;
+    private int likes;
+    private Set<User> likedBy;
+    private boolean deleted;
+
+    public BlogComment(String content, User author) {
+        this.content = content;
+        this.author = author;
+        this.likes = 0;
+        this.likedBy = new HashSet<>();
+        this.deleted = false;
+    }
+
+    @Override
+    public String getContent() {
+        return content;
+    }
+
+    @Override
+    public User getAuthor() {
+        return author;
+    }
+
+    @Override
+    public int getLikes() {
+        return likes;
+    }
+
+    @Override
+    public void addLike(User user) {
+        if (!deleted && likedBy.add(user)) {
+            likes++;
+        }
+    }
+
+    @Override
+    public void editContent(String newContent) {
+        if (!deleted) {
+            this.content = newContent;
+        }
+    }
+
+    @Override
+    public void delete() {
+        deleted = true;
+    }
+}
+
+class BlogReply extends BlogComment {
+    public BlogReply(String content, User author) {
+        super(content, author);
+    }
+}
+
+class BlogService {
+    private List<Post> posts;
+    private Map<Post, List<Comment>> comments;
+
+    public BlogService() {
+        this.posts = new ArrayList<>();
+        this.comments = new HashMap<>();
+    }
+
+    public void createPost(BlogPost post) {
+        posts.add(post);
+        comments.put(post, new ArrayList<>());
+    }
+
+    public void addComment(BlogPost post, BlogComment comment) {
+        List<Comment> postComments = comments.computeIfAbsent(post, k -> new ArrayList<>());
+        postComments.add(comment);
+    }
+
+    public void addReply(BlogPost post, BlogComment parentComment, BlogReply reply) {
+        List<Comment> postComments = comments.computeIfAbsent(post, k -> new ArrayList<>());
+        int index = postComments.indexOf(parentComment);
+        if (index != -1) {
+            postComments.add(index + 1, reply);
+        }
+    }
+
+    public void editComment(Post post, Comment comment, String newContent) {
+        List<Comment> postComments = comments.get(post);
+        if (postComments != null) {
+            int index = postComments.indexOf(comment);
+            if (index != -1) {
+                comment.editContent(newContent);
+            }
+        }
+    }
+
+    public void deleteComment(Post post, Comment comment) {
+        List<Comment> postComments = comments.get(post);
+        if (postComments != null) {
+            comment.delete();
+        }
+    }
+
+    public void likeComment(Post post, Comment comment, User user) {
+        List<Comment> postComments = comments.get(post);
+        if (postComments != null) {
+            comment.addLike(user);
+        }
+    }
+
+    public void likePost(Post post, User user) {
+        int index = posts.indexOf(post);
+        if (index != -1) {
+            post.addLike(user);
+        }
+    }
+
+    public void viewBlog() {
+        for (Post post : posts) {
+            System.out.println("제목: " + post.getTitle());
+            System.out.println("내용: " + post.getContent());
+            System.out.println("작성자: " + post.getAuthor().getUsername());
+            System.out.println("상태: " + post.getStatus());
+
+            List<Comment> postComments = comments.get(post);
+            if (postComments != null) {
+                for (Comment comment : postComments) {
+                    if (!(comment instanceof BlogReply)) {
+                        System.out.println("댓글 작성자: " + comment.getAuthor().getUsername() + ": " +
+                                comment.getContent() + " (좋아요 수: " + comment.getLikes() + ")");
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public List<Post> searchPosts(String keyword) {
+        List<Post> searchResults = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getTitle().contains(keyword) || post.getContent().contains(keyword)) {
+                searchResults.add(post);
+            }
+        }
+        return searchResults;
+    }
+}
+
+public class BlogPostingExample {
+    public static void main(String[] args) {
+    	 User author = new User("홍길동");
+         User commenter1 = new User("이순신");
+         User commenter2 = new User("강감찬");
+
+         // BlogService 생성
+         BlogService blogService = new BlogService();
+
+         // 첫 번째 블로그 포스트 생성
+         BlogPost post1 = new BlogPost("Java 기초", "이것은 Java 프로그래밍 소개입니다.", author);
+         blogService.createPost(post1);
+
+         // 댓글 추가
+         BlogComment comment1 = new BlogComment("좋은 글입니다!", commenter1);
+         blogService.addComment(post1, comment1);
+
+         // 대댓글 추가
+         BlogReply reply1 = new BlogReply("감사합니다!", author);
+         blogService.addReply(post1, comment1, reply1);
+
+         // 두 번째 블로그 포스트 생성
+         BlogPost post2 = new BlogPost("객체 지향 프로그래밍", "Java에서 객체 지향 개념을 이해하기.", author);
+         blogService.createPost(post2);
+
+         // 좋아요 추가
+         blogService.likeComment(post1, comment1, commenter2);
+         blogService.likePost(post2, commenter1);
+
+         // 수정된 내용 출력
+         System.out.println("*************** 블로그 포스트 및 댓글 ***************");
+         blogService.viewBlog();
+
+         // 댓글 수정
+         blogService.editComment(post1, comment1, "정말 도움이 되는 글이에요!");
+
+         // 댓글 삭제
+         blogService.deleteComment(post1, comment1);
+
+         // 수정된 내용 출력
+         System.out.println("*************** 수정 후 블로그 포스트 및 댓글 ***************");
+         blogService.viewBlog();
+
+         // 특정 키워드를 검색한 결과 출력
+         System.out.println("*************** 'Java' 키워드를 검색한 결과 ***************");
+         List<Post> searchResults = blogService.searchPosts("Java");
+         for (Post result : searchResults) {
+             System.out.println("제목: " + result.getTitle());
+             System.out.println("내용: " + result.getContent());
+             System.out.println("작성자: " + result.getAuthor().getUsername());
+             System.out.println("상태: " + result.getStatus());
+             System.out.println();
+         }
+    }
+}
