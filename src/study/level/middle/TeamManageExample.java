@@ -3,9 +3,9 @@ package study.level.middle;
 import java.util.*;
 
 enum TaskStatus {
-    TODO,
-    IN_PROGRESS,
-    DONE
+    TODO, // 오늘 해야할 일
+    진행중,
+    완료
 }
 
 class Task<T extends Enum<T>> {
@@ -70,14 +70,14 @@ class Project<T extends Enum<T>> {
     }
 
     public void printTeamTasks() {
-        System.out.println("Project: " + projectName);
+        System.out.println("프로젝트: " + projectName);
         for (Map.Entry<TeamMember, List<Task<?>>> entry : teamTasks.entrySet()) {
             TeamMember teamMember = entry.getKey();
             List<Task<?>> tasks = entry.getValue();
 
-            System.out.println("Team Member: " + teamMember.getName());
+            System.out.println("팀 멤버: " + teamMember.getName());
             for (Task<?> task : tasks) {
-                System.out.println("  - Task: " + task.getName() + " | Status: " + task.getStatus());
+                System.out.println("  - 작업: " + task.getName() + " | 상태: " + task.getStatus());
             }
         }
     }
@@ -88,16 +88,16 @@ public class TeamManageExample {
         TeamMember john = new TeamMember("John");
         TeamMember alice = new TeamMember("Alice");
 
-        Task<TaskStatus> task1 = new Task<>("Refactor Code");
-        Task<TaskStatus> task2 = new Task<>("Write Unit Tests");
-        Task<TaskStatus> task3 = new Task<>("Design UI");
+        Task<TaskStatus> task1 = new Task<>("코드 리팩토링");
+        Task<TaskStatus> task2 = new Task<>("단위 테스트 작성");
+        Task<TaskStatus> task3 = new Task<>("UI 디자인");
 
         john.addTask(task1);
         john.addTask(task2);
 
         alice.addTask(task3);
 
-        Project<TaskStatus> softwareProject = new Project<>("Software Project");
+        Project<TaskStatus> softwareProject = new Project<>("소프트웨어 프로젝트");
         softwareProject.addTeamMember(john);
         softwareProject.addTeamMember(alice);
 
@@ -105,9 +105,9 @@ public class TeamManageExample {
         softwareProject.assignTask(john, task2);
         softwareProject.assignTask(alice, task3);
 
-        task1.setStatus(TaskStatus.IN_PROGRESS);
-        task2.setStatus(TaskStatus.DONE);
-        task3.setStatus(TaskStatus.IN_PROGRESS);
+        task1.setStatus(TaskStatus.진행중);
+        task2.setStatus(TaskStatus.완료);
+        task3.setStatus(TaskStatus.진행중);
 
         softwareProject.printTeamTasks();
     }
